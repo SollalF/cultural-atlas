@@ -1,14 +1,14 @@
 import { Map } from "lucide-react";
 
 export const projectDetails = {
-  title: "Culture Map",
-  projectSlug: "culture-map",
+  title: "Cultural Atlas",
+  projectSlug: "cultural-atlas",
   description:
-    "An interactive map for exploring and visualizing cultural data and connections.",
+    "An interactive atlas for exploring and visualizing cultural data and connections.",
   longDescription:
-    "Culture Map brings together geographic and cultural datasets in an explorable interface, making it easier to discover patterns, relationships, and regional context across cultures.",
-  imageUrl: "/projects/culture-map.png",
+    "Cultural Atlas brings together geographic and cultural datasets in an explorable interface, making it easier to discover patterns, relationships, and regional context across cultures.",
+  imageUrl: "/projects/cultural-atlas.png",
   tags: ["Next.js", "TypeScript", "Maps", "Data Visualization", "Interactive"],
-  githubUrl: "https://github.com/SollalF/culture-map",
+  githubUrl: "https://github.com/SollalF/cultural-atlas",
   icon: Map,
 };

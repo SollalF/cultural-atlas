@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: projectDetails.description,
 };
 
-export default async function CultureMap() {
+export default async function CulturalAtlas() {
   let readmeContent = "Loading README content...";
 
   try {
@@ -20,12 +20,13 @@ export default async function CultureMap() {
       if (urlParts.length >= 2) {
         const owner = urlParts[urlParts.length - 2] || "SollalF";
         const repo =
-          urlParts[urlParts.length - 1]?.replace(".git", "") || "culture-map";
+          urlParts[urlParts.length - 1]?.replace(".git", "") ||
+          "cultural-atlas";
         readmeContent = await fetchReadmeFromGitHub(owner, repo);
       }
     }
   } catch (error) {
-    console.error("Error in CultureMap component:", error);
+    console.error("Error in CulturalAtlas component:", error);
     readmeContent = "Error loading README content. Please try again later.";
   }
 
@@ -62,8 +63,8 @@ export default async function CultureMap() {
           </p>
         </div>
 
-        <div className="flex gap-4 justify-center">
-          {projectDetails.githubUrl && (
+        {projectDetails.githubUrl && (
+          <div className="flex gap-4 justify-center">
             <a
               href={projectDetails.githubUrl}
               target="_blank"
@@ -72,18 +73,8 @@ export default async function CultureMap() {
             >
               View Source →
             </a>
-          )}
-          {projectDetails.liveUrl && (
-            <a
-              href={projectDetails.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-green-500 hover:text-green-700 inline-block"
-            >
-              Live Demo →
-            </a>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       <div className="prose dark:prose-invert max-w-none w-full py-8">
