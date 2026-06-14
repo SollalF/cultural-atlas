@@ -5,6 +5,8 @@ import { projectDetails } from "./project-details";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { fetchReadmeFromGitHub } from "@/lib/github-utils";
+import CultureMapDemoWrapper from "./culture-map-demo-wrapper";
+import { SCALES } from "./data/scales";
 
 export const metadata: Metadata = {
   title: projectDetails.title,
@@ -75,6 +77,53 @@ export default async function CulturalAtlas() {
             </a>
           </div>
         )}
+      </div>
+
+      <section className="my-8 rounded-lg border bg-card p-6">
+        <div className="mb-6 max-w-2xl">
+          <h2 className="text-2xl font-semibold">How to read the scales</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Each scale runs from 0 to 99. Lower scores sit closer to the first
+            pole, while higher scores sit closer to the second pole. These are
+            tendencies, not rules for every individual.
+          </p>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          {SCALES.map((scale) => (
+            <article
+              key={scale.id}
+              className="rounded-lg border bg-background/60 p-4"
+            >
+              <h3 className="text-sm font-semibold">{scale.label}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {scale.description}
+              </p>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Low: {scale.low}
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {scale.lowDescription}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    High: {scale.high}
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {scale.highDescription}
+                  </p>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <div className="w-full min-h-[600px] rounded-lg border bg-card p-4 py-8">
+        <CultureMapDemoWrapper />
       </div>
 
       <div className="prose dark:prose-invert max-w-none w-full py-8">
