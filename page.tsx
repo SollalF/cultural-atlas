@@ -7,6 +7,7 @@ import remarkGfm from "remark-gfm";
 import { fetchReadmeFromGitHub } from "@/lib/github-utils";
 import CultureMapDemoWrapper from "./culture-map-demo-wrapper";
 import { SCALES } from "./data/scales";
+import { ScaleGradientBar } from "./components/scale-gradient-bar";
 
 export const metadata: Metadata = {
   title: projectDetails.title,
@@ -99,20 +100,17 @@ export default async function CulturalAtlas() {
               <p className="mt-1 text-sm text-muted-foreground">
                 {scale.description}
               </p>
-              <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    Low: {scale.low}
-                  </p>
-                  <p className="mt-1 text-xs text-muted-foreground">
+              <div className="mt-4 space-y-2">
+                <ScaleGradientBar
+                  low={scale.low}
+                  high={scale.high}
+                  showLabels
+                />
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <p className="text-xs text-muted-foreground">
                     {scale.lowDescription}
                   </p>
-                </div>
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    High: {scale.high}
-                  </p>
-                  <p className="mt-1 text-xs text-muted-foreground">
+                  <p className="text-xs text-muted-foreground sm:text-right">
                     {scale.highDescription}
                   </p>
                 </div>
