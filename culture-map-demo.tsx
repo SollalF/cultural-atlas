@@ -14,7 +14,13 @@ import {
   Radar,
   RadarChart,
 } from "recharts";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   ChartContainer,
   ChartLegend,
@@ -63,52 +69,19 @@ const DEFAULT_MAP_SCALE: ScaleId = "communicating";
 
 const SCALE_REFERENCE_SOURCE_IDS: Record<ScaleId, SourceId[]> = {
   communicating: [
-    "hall-beyond-culture",
-    "hall-hall-1990",
-    "hofstede-software-of-mind",
-    "mckay-semmler-2017",
-    "cardon-2008",
   ],
   evaluating: [
-    "meyer-culture-map",
-    "globe-culture-leadership-2004",
-    "globe-phase2-societal-culture-data",
   ],
   persuading: [
-    "meyer-culture-map",
-    "kaplan-cultural-thought-patterns-1966",
-    "siepmann-academic-writing-culture-2006",
-    "uysal-argumentation-2012",
-    "helal-franco-american-aids-war-2014",
-    "norenzayan-formal-intuitive-reasoning-2002",
-    "lechuga-holistic-reasoning-mexicans-2011",
-    "klein-rosetta-phase1-2009",
   ],
   leading: [
-    "meyer-culture-map",
-    "globe-introduction-2002",
-    "globe-culture-leadership-2004",
-    "globe-phase2-societal-culture-data",
   ],
   deciding: [
-    "meyer-culture-map",
-    "globe-culture-leadership-2004",
-    "globe-phase2-leadership-data",
   ],
-  trusting: [
-    "integrated-values-surveys-trust",
-    "delhey-newton-welzel-2011",
-  ],
+  trusting: [],
   disagreeing: [
-    "meyer-culture-map",
-    "globe-culture-leadership-2004",
-    "globe-phase2-societal-culture-data",
-    "ting-toomey-conflict-styles-1991",
   ],
   scheduling: [
-    "meyer-culture-map",
-    "levine-norenzayan-pace-life-1999",
-    "kaufman-scarborough-monochronic-polychronic-2017",
   ],
 };
 
@@ -217,7 +190,10 @@ function geometryToPath(geometry: WorldGeometry): string {
     .join(" ");
 }
 
-function getCountryScore(country: Country, scaleId: ScaleId): ScoreEntry | undefined {
+function getCountryScore(
+  country: Country,
+  scaleId: ScaleId,
+): ScoreEntry | undefined {
   return (country.scores as Partial<Record<ScaleId, ScoreEntry>>)[scaleId];
 }
 
@@ -240,7 +216,11 @@ function collectSourcesFromCountries(...countryList: Country[]): Source[] {
   return [...used.values()].sort((a, b) => a.title.localeCompare(b.title));
 }
 
-function SourceCitationItem({ source }: { source: Source }) {
+function SourceCitationItem({ source }: { source: Source | undefined }) {
+  if (!source) {
+    return <li>Source metadata not yet added.</li>;
+  }
+
   return (
     <li>
       {source.url ? (
@@ -294,7 +274,10 @@ function CountrySelect({
   return (
     <div className="flex flex-1 flex-col gap-2">
       <Label htmlFor={id}>{label}</Label>
-      <Select value={value} onValueChange={(next) => onChange(next as CountryId)}>
+      <Select
+        value={value}
+        onValueChange={(next) => onChange(next as CountryId)}
+      >
         <SelectTrigger id={id} className="w-full" aria-label={label}>
           <SelectValue />
         </SelectTrigger>
@@ -314,13 +297,7 @@ function CountrySelect({
   );
 }
 
-function ScaleBar({
-  score,
-  color,
-}: {
-  score: number;
-  color: string;
-}) {
+function ScaleBar({ score, color }: { score: number; color: string }) {
   return (
     <div className="relative h-2 w-full overflow-hidden rounded-full bg-muted">
       <div
@@ -607,12 +584,7 @@ export default function CultureMapDemo() {
       <CardHeader className="px-0">
         <CardTitle>Culture Map Comparison</CardTitle>
         <CardDescription>
-          Compare two countries across eight behavioral scales. Communicating scores
-          are sourced from Hall and Hofstede research; persuading includes
-          intercultural-rhetoric and cognition research where available; leading uses
-          GLOBE power-distance data where available; deciding uses GLOBE
-          participative-leadership data where available. Scores range from 0
-          (left pole) to 99 (right pole).
+          Compare two countries across eight behavioral scales.
         </CardDescription>
       </CardHeader>
 
@@ -689,8 +661,8 @@ export default function CultureMapDemo() {
               <h3 className="text-sm font-semibold">Scale Map</h3>
               <p className="mt-1 max-w-2xl text-xs text-muted-foreground">
                 Select a scale to see every country with cited data shaded on a
-                balanced turquoise-to-purple gradient. The colors mark position on
-                the scale without implying better or worse.
+                balanced turquoise-to-purple gradient. The colors mark position
+                on the scale without implying better or worse.
               </p>
             </div>
             <ScaleSelect
@@ -738,7 +710,8 @@ export default function CultureMapDemo() {
                   fill="var(--background)"
                 />
                 {worldFeatures.map((feature) => {
-                  const featureName = feature.properties.name ?? "Unknown country";
+                  const featureName =
+                    feature.properties.name ?? "Unknown country";
                   const country = getCountryFromFeature(feature);
                   const score = country
                     ? getCountryScore(country, mapScaleId)?.sources[0].value
@@ -750,9 +723,7 @@ export default function CultureMapDemo() {
                       key={featureName}
                       d={geometryToPath(feature.geometry)}
                       fill={
-                        hasScore
-                          ? getNeutralScoreColor(score)
-                          : "var(--muted)"
+                        hasScore ? getNeutralScoreColor(score) : "var(--muted)"
                       }
                       fillOpacity={hasScore ? 1 : 0.35}
                       stroke="var(--border)"
@@ -788,12 +759,15 @@ export default function CultureMapDemo() {
                 Closest to {mapScale.low}
               </h4>
               <ol className="mt-2 space-y-1 text-xs text-muted-foreground">
-                {mapScores.slice(-5).reverse().map(({ country, score }) => (
-                  <li key={country.id} className="flex justify-between gap-3">
-                    <span>{country.name}</span>
-                    <span>{score}</span>
-                  </li>
-                ))}
+                {mapScores
+                  .slice(-5)
+                  .reverse()
+                  .map(({ country, score }) => (
+                    <li key={country.id} className="flex justify-between gap-3">
+                      <span>{country.name}</span>
+                      <span>{score}</span>
+                    </li>
+                  ))}
               </ol>
             </div>
             <div className="rounded-md bg-muted/30 p-3">
@@ -915,7 +889,8 @@ export default function CultureMapDemo() {
               </div>
             </div>
             <p className="mt-3 text-[11px] text-muted-foreground">
-              Hover any score to see its citation chain — primary first, then secondary sources.
+              Hover any score to see its citation chain — primary first, then
+              secondary sources.
             </p>
           </div>
         )}
