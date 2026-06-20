@@ -63,25 +63,24 @@ import {
   type SourceId,
 } from "./data/sources";
 
-const DEFAULT_COUNTRY_A: CountryId = "usa";
+const DEFAULT_COUNTRY_A: CountryId = "united-states";
 const DEFAULT_COUNTRY_B: CountryId = "japan";
 const DEFAULT_MAP_SCALE: ScaleId = "communicating";
 
 const SCALE_REFERENCE_SOURCE_IDS: Record<ScaleId, SourceId[]> = {
-  communicating: [
-  ],
-  evaluating: [
-  ],
-  persuading: [
-  ],
-  leading: [
-  ],
-  deciding: [
-  ],
-  trusting: [],
-  disagreeing: [
-  ],
+  communicating: ["shen-2022"],
+  evaluating: ["globe-phase-2"],
+  persuading: ["ralston-2011"],
+  leading: ["ralston-2011"],
+  deciding: ["hofstede-2015"],
+  trusting: ["pelham-2022"],
+  disagreeing: ["globe-phase-2", "eriksson-2021"],
   scheduling: [
+    "levine-norenzayan-1999",
+    "wang-2016",
+    "white-2011",
+    "van-eerde-azar-2019",
+    "krupka-2022",
   ],
 };
 
@@ -147,9 +146,9 @@ const COUNTRY_NAME_ALIASES: Record<string, CountryId> = {
   syria: "syria",
   "syrian arab republic": "syria",
   tanzania: "tanzania",
-  "united kingdom": "uk",
-  "united states": "usa",
-  "united states of america": "usa",
+  "united kingdom": "united-kingdom",
+  "united states": "united-states",
+  "united states of america": "united-states",
   venezuela: "venezuela",
   vietnam: "vietnam",
   "viet nam": "vietnam",
